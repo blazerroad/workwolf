@@ -1,6 +1,8 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project it simple base library for using REDUX with REACT and REPOSITORY pattern
+For accessing the NPM library of react-redux-repository please visit : 
 
-## Available Scripts
+
+## Diagram
 
 In the project directory, you can run:
 
