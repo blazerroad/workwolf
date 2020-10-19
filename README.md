@@ -5,7 +5,7 @@ For accessing the library of reac-native-repository please visit:
 
 ## Diagram
 
-In the project directory, you can run:
+  <img width=200 title="iOS Single Pick" src="https://github.com/blazerroad/react-native-image-video-picker-editor/blob/master/gifs/demo1.gif">
 
 ### `npm start`
 
