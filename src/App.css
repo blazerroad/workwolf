@@ -9,12 +9,11 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
-    animation: App-logo-spin infinite 20s linear;
   }
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #231f20;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,6 +21,13 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.Txt-field {
+  width:400px;
+  height:30px;
+  margin:10px;
+  text-align: center
 }
 
 .App-link {
