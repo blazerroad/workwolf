@@ -5,7 +5,7 @@ For accessing the library of reac-native-repository please visit:
 
 ## Diagram
 
-  <img width=200 title="iOS Single Pick" src="https://github.com/blazerroad/react-native-image-video-picker-editor/blob/master/gifs/demo1.gif">
+  <img width=200 title="repository diagram" src="https://github.com/blazerroad/workwolf/blob/master/public/repository.png">
 
 ### `npm start`
 
