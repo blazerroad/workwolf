@@ -1,5 +1,6 @@
-This project it simple base library for using REDUX with REACT and REPOSITORY pattern
-For accessing the NPM library of react-redux-repository please visit : 
+This is a example react project for using REPOSITORY apttern in REACT with  REDUX.
+For accessing the library of react-redux-repository please visit: 
+For accessing the library of reac-native-repository please visit:
 
 
 ## Diagram
