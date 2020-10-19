@@ -1,71 +1,131 @@
-This is a example react project for using REPOSITORY apttern in REACT with  REDUX.
+This is a example react project for using REPOSITORY pattern in REACT with  REDUX.
 For accessing the library of react-redux-repository please visit: 
+<p>
+https://github.com/blazerroad/react-redux-repository
+  </p>
+
 For accessing the library of reac-native-repository please visit:
+<p>
+https://github.com/blazerroad/react-native-repository
+  </p>
 
 
-## Diagram
+# Diagram
 
-  <img width=200 title="repository diagram" src="https://github.com/blazerroad/workwolf/blob/master/public/repository.png">
+  <img width=800 title="repository diagram" src="https://github.com/blazerroad/workwolf/blob/master/public/repository.png">
 
-### `npm start`
+# Why
+This example show you how you can manage your code better with redux pattern if you are involved in mid-size or bigger application, with help of Repository pattern you can achieve SOLID principal and make cleaner, extendable,  easy to change 
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# How
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## Step 1
+### Install
+```bash
+npm i react-native-image-video-picker-editor --save
+```
 
-### `npm test`
+## Step 2
+For actions you should add two folders :
+```bash
+-respositories
+-services
+```
+repository pattern is base on type of entity, for each entity you should add : 
+  - model 
+  - respository
+  - service 
+  
+  #### Model 
+each model should be extends IEntity, DefaultEntity is default calss implemented IEntity you can use DefaultEntity or implement your own
+```javascript
+import {DefaultEntity } from 'react-native-repository/repository'
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+export class TopHashtag extends DefaultEntity {
 
-### `npm run build`
+    id : string;
+    title : string;
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+    constructor(id? : string, title? : string) {
+        super();
+        this.id = id;
+        this.title = title;
+    }
+}
+```
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+#### Repository
+each repository should extends IRepository at react-native-repository I developed two repository for "Azure cosmos" and "azure germlin cosmos" for react-redux-libarary you should implement your own base repository base the backend service which your are using.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```javascript
+import { AzureCosmosRepository,AzureFetchEntityMetaData } from "react-native-repository/repository"
+import { TopHashtag } from '../../models/TopHashtag'
 
-### `npm run eject`
+export class TopHashtagRepository extends AzureCosmosRepository<TopHashtag>
+{
+    constructor()
+    {
+        const metaData = new AzureFetchEntityMetaData("TopHashtag","Hashtag","Chiko");
+        super(metaData);
+    }
+    async map(response: Response): Promise<Array<TopHashtag>> {
+       const mapping = this.innerMap(response, new TopHashtag(), new Array<TopHashtag>());
+       return mapping;
+    }
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+#### service
+each service should extends IService for REDUX I implemented BaseReduxService but you can impliment any Base service.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```javascript
+import { BaseReduxService } from "react-native-repository/repository"
+import { TopHashtag } from '../../models/TopHashtag'
+import {TopHashtagRepository} from '../repositories/TopHastagsRepository'
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+export class TopHashtagsService extends BaseReduxService<TopHashtag,TopHashtagRepository>
+{
+    constructor(dispatch: any)
+    {
+        const repository = new  TopHashtagRepository();
+        super(dispatch,repository);
+    }
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+}
+```
 
-## Learn More
+#### service FACAD
+this class is contains instance of all services which created.
+```javascript
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+import { TopHashtagsService } from "./TopHashtagsService";
+import { UploadImage } from "./UploadImage";
+import { initAzureCosmos } from 'react-native-azure-cosmos/azurecosmos'
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+export class Services {
+    public static instance: Services;
 
-### Code Splitting
+    public static init(dispatch: any) {
+        Services.instance = new Services(dispatch);
+    }
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+    public topHashtage: TopHashtagsService
+    public uploadImage: UploadImage
 
-### Analyzing the Bundle Size
+    private constructor(dispatch: any) {
+        this.topHashtage = new TopHashtagsService(dispatch);
+        this.uploadImage = new UploadImage();
+       
+    }
+}
+```
+#### add service FACAD to REDUX
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+after creating your store call Services.init(store.dispatch)
+```javascript
+import { Services } from './store/actions/services/services'
 
-### Making a Progressive Web App
+const store = createStore(rootReducer, applyMiddleware(crashReporter, thunk, vanillaPromise, readyStatePromise));
+Services.init(store.dispatch);
+```
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
