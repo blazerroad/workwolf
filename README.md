@@ -22,7 +22,7 @@ This example show you how you can manage your code better with redux pattern if 
 ## Step 1
 ### Install
 ```bash
-npm i react-native-image-video-picker-editor --save
+npm i react-redux-respository --save
 ```
 
 ## Step 2
